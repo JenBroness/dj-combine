@@ -1,0 +1,15 @@
+-Set up conda
+
+-Add 'conda-forge' channel to conda config
+conda create -n django-cast-model django psycopg2 pycrypto (pycrypto appears to include patches)
+
+-Install pgadmin4 wheel
+
+-Update werkzeug and maybe pytz (Not sure if later version of pytz is necessary)
+pip install -U werkzeug
+pip install -U pytz
+
+-Create batchfiles in Miniconda activate.d / deactivate.d directories to set/unse the following vars:
+DB_NAME
+DB_USER
+DB_PASSWD
