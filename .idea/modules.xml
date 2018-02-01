@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/dj_combined_model.iml" filepath="$PROJECT_DIR$/.idea/dj_combined_model.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/django_cast_model.iml" filepath="$PROJECT_DIR$/.idea/django_cast_model.iml" />
     </modules>
   </component>
 </project>
