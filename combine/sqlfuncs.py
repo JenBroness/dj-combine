@@ -56,20 +56,20 @@ def selection_sql(view_model, donors, renames):
     return selection + '\n'
 
 
-def fields_and_renames(view_model, contributing_model, renames):
+def fields_and_renames(view_model, donor_model, renames):
     fields = [ field for field in list(reversed(view_model._meta.fields)) if field is not view_model._meta.pk ]
     fields_and_renames = ""
     for field in fields:
-        fields_and_renames = FIELDS_AND_RENAMES.format(field_and_rename=field_and_rename(field, contributing_model, renames),
+        fields_and_renames = FIELDS_AND_RENAMES.format(field_and_rename=field_and_rename(field, donor_model, renames),
                                                        fields_and_renames=fields_and_renames)
     return fields_and_renames + '\n'
 
 
-def field_and_rename(field, contributing_model, renames):
+def field_and_rename(field, donor_model, renames):
     new_column = field.column
     old_column = None
     try:
-        old_column = renames[new_column][contributing_model]
+        old_column = renames[new_column][donor_model]
     except KeyError:
         pass
     if old_column is None:

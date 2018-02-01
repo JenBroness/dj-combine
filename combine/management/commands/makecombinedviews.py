@@ -74,7 +74,6 @@ class Command(makemigrations.Command):
                 self.stderr.write("App '%s' could not be found. Is it in INSTALLED_APPS?" % app_label)
             sys.exit(2)
 
-
     def handle(self, *args, **options):
         self._handle_init(*args, **options)
 

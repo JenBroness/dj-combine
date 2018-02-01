@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class CastModelConfig(AppConfig):
+class CombinedModelConfig(AppConfig):
     name = ''

@@ -4,7 +4,7 @@ from django.utils import six
 
 
 class Rename:
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         #kwargs: {newname(str) : {model(Model) : oldname(str)...}...}
         models_with_renames = set([])
         reduce_this =[ model for changes in kwargs.values() for model in changes.keys() ]
@@ -41,12 +41,7 @@ class Rename:
 class CombineOptions:
     def __init__(self, donors, renames):
         self.donors = tuple([(donor._meta.app_label, donor._meta.model_name) for donor in donors])
-        self.renames = Rename(*donors, **renames)
-    # def deconstruct(self): (Might be useless if I can derive this info in combine/operations.py 1/9/2018)
-    #     donor_states = { model._meta.label:ModelState.from_model(model) for model in self.donors }
-    #     rename_states = self.renames.deconstruct()
-    #     donor_tables = { model._meta.db_table for model in self.donors }
-    #     return { 'donor_states':donor_states, 'rename_states':rename_states, 'donor_tables':donor_tables}
+        self.renames = Rename(**renames)
 
 
 class CombinedModelViewBase(ModelBase):

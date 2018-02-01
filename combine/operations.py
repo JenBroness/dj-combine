@@ -54,6 +54,7 @@ class CombinedViewOperation(Operation):
     def describe(self):
         return "Create view model {} combining {}".format(self.name, self.donors)
 
+
 class CreateCombinedView(CombinedViewOperation):
 
     def database_forwards(self, app_label, schema_editor, from_state, to_state):
@@ -64,6 +65,7 @@ class CreateCombinedView(CombinedViewOperation):
 
     def describe(self):
         return "Create view model {} combining {}".format(self.name, self.donors)
+
 
 class RemoveCombinedView(CombinedViewOperation):
 

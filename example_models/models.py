@@ -5,47 +5,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.fields import GenericRelation
 
-# class ContributorLink(models.Model):
-#     creation=models.ForeignKey(Creation)
-#     creation_content_type = models.ForeignKey(ContentType)
-#     contributor = models.ForeignKey(Person)
-#     contributor_content_type = models.ForeignKey(ContentType)
-#
-#
-# class Person(models.Model):
-#     fname = models.CharField(max_length=15)
-#     lname = models.CharField(max_length=15)
-#     creations = models.ManyToManyField(Creation, through='ContributorLink', related_name='contributors')
-#
-#
-# class Author(Person):
-#     genre = models.CharField(max_length=20)
-#
-#
-# class Artist(Person):
-#     style = models.CharField(max_length=20)
-#
-#
-# class Creation(models.Model):
-#     title = models.CharField(max_length=150)
-#
-#
-# class Artwork(Creation):
-#     contributors = models.ManyToManyField(Artist)
-#
-#
-# class Story(Creation):
-#     contributors = models.ManyToManyField(Author)
-#
-#
-# class Paper(Creation):
-#     contributors = models.ManyToManyField(Author)
-#
-#
-# class CrossCollaboration(Creation):
-#     pass
-## General collaboration is a proxy that can refer to Story, Artwork, Paper, CrossCollaboration
-
 FEW_CHARS = 15
 MANY_CHARS = 45
 QUIET = 2
@@ -85,13 +44,13 @@ class Pet(CombinedModelView, models.Model):
             'coat': {Cat: 'coat_type', Dog: 'coat_description'}
         }
 
-class ExtraPet(CombinedModelView, models.Model):
-    id = models.TextField(primary_key=True)
-    name = models.CharField(max_length=FEW_CHARS)
-
-    class Meta:
-        db_table='example_models_extrapets'
-
-    class Combiner:
-        donors = (Cat, Dog)
-        renames = {}
+# class ExtraPet(CombinedModelView, models.Model):
+#     id = models.TextField(primary_key=True)
+#     name = models.CharField(max_length=FEW_CHARS)
+#
+#     class Meta:
+#         db_table='example_models_extrapets'
+#
+#     class Combiner:
+#         donors = (Cat, Dog)
+#         renames = {}
