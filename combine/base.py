@@ -9,8 +9,6 @@ class Rename:
         models_with_renames = set([])
         reduce_this =[ model for changes in kwargs.values() for model in changes.keys() ]
         for model in reduce_this:
-            if not isinstance(model, ModelBase):
-                raise Exception("Not a model")
             models_with_renames.add(model)
         self._by_model = { model: {} for model in models_with_renames }
         for newname, submapping in kwargs.items():
@@ -20,7 +18,6 @@ class Rename:
                                   for model, oldname in changes.items() }
                               for newname, changes in kwargs.items() }
 
-    # to do: make serializable, make sqlfuncs operate on serialized info
     def deconstruct(self):
         return { newname: [(donor._meta.app_label, donor._meta.model_name, field.name) for donor, field in remap.items()]
                  for newname, remap in self._by_fieldname.items() }
@@ -60,8 +57,10 @@ class CombinedModelViewBase(ModelBase):
                 #TODO: Is [Model].Meta.db_table necessary or does Django generate it automatically even for unmanaged models?
                 #TODO: disallow use of abstract parent models
                 #TODO: disallow weird Meta options that don't make sense
-
-                attrs['Meta'].managed = False
+                try:
+                    attrs['Meta'].managed = False
+                except KeyError:
+                    attrs['Meta'] = type('Meta', (), {'managed':False})
                 new_class = super_new(cls, name, bases, attrs)
                 new_class._combiner = combiner
                 # TODO: disallow saves, deletes, mass updates and deletes by wrapping the manager
