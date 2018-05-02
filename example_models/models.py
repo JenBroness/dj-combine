@@ -1,9 +1,6 @@
 from django.db import models
 from combine.base import CombinedModelView
-from copy import copy
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.auth.models import User
 
 FEW_CHARS = 15
 MANY_CHARS = 45
@@ -44,13 +41,45 @@ class Pet(CombinedModelView, models.Model):
             'coat': {Cat: 'coat_type', Dog: 'coat_description'}
         }
 
-# class ExtraPet(CombinedModelView, models.Model):
-#     id = models.TextField(primary_key=True)
-#     name = models.CharField(max_length=FEW_CHARS)
-#
-#     class Meta:
-#         db_table='example_models_extrapets'
-#
-#     class Combiner:
-#         donors = (Cat, Dog)
-#         renames = {}
+class UserActivity(models.Model):
+    time_posted = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User)
+
+
+class Replyable(UserActivity):
+    forum = models.CharField(max_length=10)
+    views = models.PositiveIntegerField()
+    content = models.TextField()
+
+
+class Post(Replyable):
+    pass
+
+
+class Comment(Replyable):
+    in_response_to = models.ForeignKey(Replyable, related_name='subcomments')
+
+class React(UserActivity):
+    REACT_CHOICES = (
+        ('LK', 'Like'),
+        ('MZ', 'Amaze'),
+        ('SD', 'Sad'),
+        ('LV', 'Love'),
+        ('NG', 'Angry'),
+    )
+    in_response_to = models.ForeignKey(Replyable, related_name='reacts')
+    reaction = models.CharField(max_length=2, choices=REACT_CHOICES)
+
+class ReplyView(CombinedModelView, models.Model):
+    id = models.TextField(primary_key=True)
+    in_response_to = models.ForeignKey(Replyable)
+    content = models.TextField()
+
+    class Combiner:
+        donors = (Comment, React)
+        renames = {
+            'content': {Comment: 'content', React: 'reaction'}
+        }
+
+    class Meta:
+        db_table='example_models_replyviews'
