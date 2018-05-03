@@ -14,7 +14,7 @@ CombinedModelViews are always unmanaged.
 
 Here's a quick example of the functionality from the 'example_models' app. (Subject to change.)
 
-'''
+```
 FEW_CHARS = 15
 MANY_CHARS = 45
 QUIET = 2
@@ -52,4 +52,4 @@ class Pet(CombinedModelView, models.Model):
             'volume': {Cat: 'meow_volume', Dog: 'bark_volume'},
             'coat': {Cat: 'coat_type', Dog: 'coat_description'}
         }
-'''
+```
