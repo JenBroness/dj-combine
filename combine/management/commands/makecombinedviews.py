@@ -76,15 +76,17 @@ class Command(makemigrations.Command):
         models_to_add, models_to_remove = self._mcv_get_combined_model_additions_and_removals()
         app_labels_to_use = set([label_and_model[0] for label_and_model in models_to_add]).union(
                             set([label_and_model[0] for label_and_model in models_to_remove]))
-        changes = { label: [] for label in app_labels_to_use }
+        operations = { label: [] for label in app_labels_to_use }
         for app_label, model_name in models_to_add:
             model = self._mcv_current_combined_models[(app_label, model_name)]
             donors = model._combiner.donors
             renames = model._combiner.renames.deconstruct()
-            operation = CreateCombinedView(model._meta.object_name, donors, renames)
-            subclass = type(str("Migration"), (Migration,), {"operations": [operation], "dependencies": []})
+            operations[app_label].append(CreateCombinedView(model._meta.object_name, donors, renames))
+        changes = {}
+        for label, op_list in operations.items():
+            subclass = type(str("Migration"), (Migration,), {"operations": op_list, "dependencies": []})
             instance = subclass("combinedview", app_label)
-            changes[app_label].append(instance)
+            changes[label] = [instance]
         # TODO: Record model changes among models
         #I don't actually care about autodetecting anything, I just want the arrange_for_graph() method
         autodetector = MigrationAutodetector(
